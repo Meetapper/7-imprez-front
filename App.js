@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import LoadingScreen from './src/screens/LoadingScreen';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/reduxStore';
+import LoginScreen from './src/screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,10 @@ export default function App() {
             headerShown: false
           }}
         >
+        <Stack.Screen 
+          name="Login"
+          component={LoginScreen}
+        />
           <Stack.Screen 
             name="Home"
             component={Home}

@@ -15,16 +15,25 @@
       "**/*"
     ],
     "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "pl.hacknarock.siedem.iprez.elblag.hit"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "54abd29f-2b87-43be-abcd-eef7966d1693"
+      }
+    },
+    "plugins": ["@react-native-google-signin/google-signin"]
   }
 }
