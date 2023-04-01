@@ -1,11 +1,14 @@
 import React from "react";
 import { Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../redux/actions/userActions";
+import { styles } from "../constants";
 
 const Home = ({navigator}) => {
   return (
-    <View>
+    <View style={styles.centeredFlex}>
       <Text>
-        HOME SCREEN
+        HOME
       </Text>
     </View>
   );
