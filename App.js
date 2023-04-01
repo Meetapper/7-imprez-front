@@ -1,13 +1,8 @@
-import Home from './src/screens/Home';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import LoadingScreen from './src/screens/LoadingScreen';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/reduxStore';
-import LoginScreen from './src/screens/LoginScreen';
-
-const Stack = createNativeStackNavigator();
+import Screens from './src/screens/Screens';
 
 export default function App() {
 
@@ -15,41 +10,15 @@ export default function App() {
     Kanit: require('./assets/Kanit-Regular.ttf')
   })
 
-
   if (!fontsLoaded) {
-    return (<Stack.Screen 
-      name="Loading"
-      component={LoadingScreen}
-    />);
+    return null;
   }
 
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false
-          }}
-        >
-        <Stack.Screen 
-          name="Login"
-          component={LoginScreen}
-        />
-          <Stack.Screen 
-            name="Home"
-            component={Home}
-          />
-        </Stack.Navigator>
+        <Screens />
       </NavigationContainer>
     </Provider>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });

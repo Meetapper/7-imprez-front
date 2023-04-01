@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { styles } from "../constants";
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ navigation, route }) => {
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate("Home");
+    }, 2000);
+  }, []);
+
   return (
     <View style={{ ...styles.centeredFlex, ...style.background}}>
       <Text style={style.text}>
