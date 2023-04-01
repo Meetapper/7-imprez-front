@@ -7,7 +7,7 @@ const LoadingScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("Login");
+      navigation.navigate("Home");
     }, 1000);
   }, []);
 

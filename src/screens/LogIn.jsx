@@ -24,18 +24,11 @@ const Login = ({ navigation, route }) => {
     }
   }, [route.params]);
 
-  const handleSuccess = () => {
-    dispatch(setUserData(data));
-
-    navigation.replace('Home');
-  }
-
   useEffect(() => {
     if (data && !error) {
-      
+      dispatch(setUserData(data));
 
-      navigation.popToTop();
-      navigation.navigate('Home');
+      navigation.replace('Home');
     }
   }, [data]);
 

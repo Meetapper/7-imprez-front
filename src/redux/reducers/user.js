@@ -1,7 +1,7 @@
 import actionTypes from "../actionTypes"
 
 const initialState = {
-  username: 'initial username'
+  username: 'username'
 }
 
 export default (state = initialState, action) => {
