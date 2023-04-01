@@ -1,24 +1,26 @@
-const storage = new Storage({
-  // maximum capacity, default 1000 key-ids
-  size: 1000,
+// import Storage from "react-native-storage";
 
-  // Use AsyncStorage for RN apps, or window.localStorage for web apps.
-  // If storageBackend is not set, data will be lost after reload.
-  storageBackend: AsyncStorage, // for web: window.localStorage
+// const storage = new Storage({
+//   // maximum capacity, default 1000 key-ids
+//   size: 1000,
 
-  // expire time, 2 days (1000 * 3600 * 48 milliseconds).
-  // can be null, which means never expire.
-  defaultExpires: 1000 * 3600 * 48,
+//   // Use AsyncStorage for RN apps, or window.localStorage for web apps.
+//   // If storageBackend is not set, data will be lost after reload.
+//   storageBackend: AsyncStorage, // for web: window.localStorage
 
-  // cache data in the memory. default is true.
-  enableCache: true,
+//   // expire time, 2 days (1000 * 3600 * 48 milliseconds).
+//   // can be null, which means never expire.
+//   defaultExpires: 1000 * 3600 * 48,
 
-  // if data was not found in storage or expired data was found,
-  // the corresponding sync method will be invoked returning
-  // the latest data.
-  sync: {
-    // we'll talk about the details later.
-  }
-});
+//   // cache data in the memory. default is true.
+//   enableCache: true,
 
-export default storage;
+//   // if data was not found in storage or expired data was found,
+//   // the corresponding sync method will be invoked returning
+//   // the latest data.
+//   sync: {
+//     // we'll talk about the details later.
+//   }
+// });
+
+// export default storage;
