@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/reduxStore';
 import Screens from './src/screens/Screens';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 export default function App() {
 
@@ -14,11 +15,23 @@ export default function App() {
     return null;
   }
 
+  const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#000',
+      accent: '#f1c40f',
+    },
+  };
+
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Screens />
-      </NavigationContainer>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <Screens />
+        </NavigationContainer>
+      </PaperProvider>
     </Provider>
   );
 }

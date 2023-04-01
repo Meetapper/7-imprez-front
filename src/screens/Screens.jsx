@@ -1,7 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoadingScreen from "./LoadingScreen";
 import Home from "./Home";
+import Login from "./LogIn";
 import React from "react"
+import SignUp from "./SignUp";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +17,14 @@ const Screens = () => {
       <Stack.Screen 
         name="Loading"
         component={LoadingScreen}
+      />
+      <Stack.Screen 
+        name="Login"
+        component={Login}
+      />
+      <Stack.Screen 
+        name="SignUp"
+        component={SignUp}
       />
       <Stack.Screen 
         name="Home"

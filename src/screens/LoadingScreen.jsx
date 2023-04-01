@@ -1,30 +1,24 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { styles } from "../constants";
+import Logo from "../components/Logo";
 
 const LoadingScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("Home");
-    }, 2000);
+      navigation.navigate("Login");
+    }, 1000);
   }, []);
 
   return (
     <View style={{ ...styles.centeredFlex, ...style.background}}>
-      <Text style={style.text}>
-        share'em
-      </Text>
+      <Logo />
     </View>
   );
 }
 
 const style = StyleSheet.create({
-  text: {
-    fontFamily: 'Kanit',
-    color: 'white',
-    fontSize: 40
-  },
   background: {
     backgroundColor: 'black'
   }
