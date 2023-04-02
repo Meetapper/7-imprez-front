@@ -53,3 +53,24 @@ export const uploadImage = async (username) => {
         console.log(response.body);
       });
 }
+
+export const checkImage = async (username) => {
+    const AWS = require('aws-sdk')
+    const s3 = new AWS.S3()
+    AWS.config.update({
+        region: "eu-central-1",
+        accessKeyId,
+        secretAccessKey,
+        endpoint: "https://eu-central-1.linodeobjects.com",
+    })
+
+    try {
+    await s3.headObject({
+        Bucket: "shareem-photos",
+        Key: username,
+    }).promise();
+    return true;
+    } catch (error) {
+        return false;
+    }
+}
