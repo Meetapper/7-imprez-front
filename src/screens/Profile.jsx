@@ -1,18 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import { useSelector } from "react-redux";
-import { styles } from "../constants";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserAvatarUri } from "../utils/interfaceUtils";
 import { Button, IconButton } from "react-native-paper";
-import Logo from "../components/Logo";
-import { uploadImage } from "../utils/bucketUtils";
+import { checkImage, getImageUrl, uploadImage } from "../utils/bucketUtils";
+import { setDailyPosted } from "../redux/actions/sharedActions";
 
 const Profile = ({navigation}) => {
   const username = useSelector(state => state.user.username);
   const avatar = getUserAvatarUri(username);
+  const dispatch = useDispatch();
   const [dailyOpen, setDailyOpen] = useState(false);
 
-  const dailyPosted = false;
+  const dailyPosted = useSelector(state => state.shared.dailyPosted);
+  const [dailyUri, setDailyUri] = useState(null);
+
+  useEffect(() => {
+    checkImage(username).then(res => {
+      dispatch(setDailyPosted(res));
+    })
+  }, []);
+
+  useEffect(() => {
+    if (!!dailyPosted && !dailyUri) {
+      setTimeout(() => {
+        getImageUrl(username).then(res => {
+          setDailyUri(res);
+        });
+      }, 500);
+    }
+  }, [dailyPosted]);
+
 
   return (
     <>
@@ -65,9 +83,10 @@ const Profile = ({navigation}) => {
             style={dailyOpen ? { transform: [{rotate: '180deg'}], marginTop: 40 } : { transform: [{rotate: '0deg'}] }}
           />
           <Image 
-            source={{uri: avatar}}
+            source={{uri: dailyUri}}
             style={{width: 320, height: 320}}
             resizeMode="contain"
+            alt="dupa123"
           />
           <View style={style.stats}>
 
@@ -94,7 +113,7 @@ const Profile = ({navigation}) => {
       </> :
       <>
         <Text style={{fontSize: 34, marginTop: 120}}>Post Your Daily Share</Text>
-        <Button mode='contained' onPress={() => uploadImage(username)} style={{marginTop: 20, paddingHorizontal: 20, paddingVertical: 10}}>
+        <Button mode='contained' onPress={() => uploadImage(username).then(_res => {dispatch(setDailyPosted(true))})} style={{marginTop: 20, paddingHorizontal: 20, paddingVertical: 10}}>
           <Text style={{fontSize: 20}}>Share</Text>
         </Button>
       </>}

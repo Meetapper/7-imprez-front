@@ -7,9 +7,10 @@ import { Button, Text } from "react-native-paper";
 import BleManager from 'react-native-ble-manager';
 import BLEAdvertiser from 'react-native-ble-advertiser'
 import {NativeModules, NativeEventEmitter, Platform, PermissionsAndroid} from 'react-native'
-
 const BleManagerModule = NativeModules.BleManager;
 const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+import Shared from "./Shared";
+
 
 const Home = ({navigation}) => {
 
@@ -107,7 +108,7 @@ const Home = ({navigation}) => {
       </View>
       {tab === 'profile' ? 
       <Profile navigation={navigation}/>:
-      <></>}
+      <Shared />}
     </View>
   );
 }
