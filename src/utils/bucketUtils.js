@@ -4,8 +4,8 @@ import 'react-native-get-random-values';
 import * as ImagePicker from 'expo-image-picker';
 import { RNS3 } from 'react-native-aws3';
 
-const accessKeyId = "access";
-const secretAccessKey = "secret";
+const accessKeyId = "GPM8FSBKJOFZQCXY5HYZ";
+const secretAccessKey = "1swbJwGOE9BGSD0GDE4NOiL2sp8d2wcp7TGufBmQ";
 
 export const getImageUrl = async (username) => {
     const AWS = require('aws-sdk')

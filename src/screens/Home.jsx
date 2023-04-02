@@ -10,9 +10,7 @@ import {NativeModules, NativeEventEmitter, Platform, PermissionsAndroid} from 'r
 const BleManagerModule = NativeModules.BleManager;
 const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 import Shared from "./Shared";
-
-let userID = Math.floor(Math.random() * 2); // TODO
-console.log(userID);
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = ({navigation}) => {
 
@@ -22,9 +20,14 @@ const Home = ({navigation}) => {
   const scanInterval = 5000; // in millis
   const scanDuration = 1; // in seconds
 
+  let userID = useSelector(state => state.user.id);
+  console.log(userID)
+
   const [ids, setIds] = useState([]);
   console.log("IDS: ", ids);
   const [isScanning, setIsScanning] = useState(false);
+
+  const [newPosts, setNewPosts] = useState(false);
 
   useEffect(() => {
     // turn on bluetooth if it is not on
@@ -39,7 +42,7 @@ const Home = ({navigation}) => {
 
     BLEAdvertiser.enableAdapter();
     BLEAdvertiser.setCompanyId(userID); // Your Company's Code
-    BLEAdvertiser.broadcast(serviceUUID, [userID], {}) // The service UUID and additional manufacturer data. 
+    BLEAdvertiser.broadcast(serviceUUID, [], {}) // The service UUID and additional manufacturer data. 
     .then(success => console.log('Broadcasting Sucessful', success))
     .catch(error => console.log('Broadcasting Error', error));
 
@@ -88,8 +91,9 @@ const Home = ({navigation}) => {
     BleManager.getDiscoveredPeripherals().then(results => {
       if (results.length > 0) {
         for (let i = 0; i < results.length; i++) {
-          // console.log(results[i].advertising.manufacturerData.bytes);
+          console.log(results[i].advertising.manufacturerData.bytes);
           setIds([ ...ids, results[i].advertising.manufacturerData.bytes[5] ]);
+          tab !== "shared" ? setNewPosts(true) : null;
         }
       }
     });
@@ -103,13 +107,18 @@ const Home = ({navigation}) => {
           <View style={style.innerTabs}>
             <View style={tab === 'shared' ? style.shapeShared : style.shape}></View>
             <Button onPress={() => setTab('profile')}><Text style={{color: '#fff', fontSize: 16}} >Profile</Text></Button>
-            <Button onPress={() => setTab('shared')}><Text style={{color: '#fff', fontSize: 16}} >Shared</Text></Button>
+            <Button onPress={() => {setTab('shared'); setNewPosts(false);}} style={{position: 'relative'}}>
+              <Text style={{color: '#fff', fontSize: 16}} >
+                Shared
+              </Text>
+            </Button>
+            {newPosts && <View style={{position: 'absolute', backgroundColor: 'red', width: 10, height: 10, borderRadius: 9999, top: 6, right: 34}}></View>}
           </View>
         </View>
       </View>
       {tab === 'profile' ? 
       <Profile navigation={navigation}/>:
-      <Shared />}
+      <Shared ids={ids} />}
     </View>
   );
 }

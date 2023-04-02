@@ -5,27 +5,23 @@ import SharedPost from "../components/SharePost";
 import { usePostDataBearer } from "../utils/hooks";
 import { useDispatch, useSelector } from "react-redux";
 
-const Shared = () => {
+const Shared = ({ids}) => {
   const username = useSelector(state => state.user.username);
   const token = useSelector(state => state.user.accessToken);
-
-
-  const users = ['user1', 'user2', 'user3'];
-
 
   const {loading, error, data, postData, reset} =  usePostDataBearer('/interact/list', token)
 
   useEffect(() => {
-    postData({users: [1,2,3,4]})
-  }, [])
+    postData({users: ids})
+  }, []);
 
   console.log(data)
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        {users.map((user, index) => 
-          <SharedPost key={index} username={user}/>
+        {data?.map((post, index) => 
+          <SharedPost key={index} username={post.username} ratio={post.likeRatio}/>
         )}
       </ScrollView> 
     </SafeAreaView>

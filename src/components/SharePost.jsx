@@ -3,34 +3,42 @@ import { getImageUrl } from "../utils/bucketUtils";
 import { StyleSheet } from "react-native";
 import { usePostData } from "../utils/hooks";
 import { useSelector } from "react-redux";
-import { ActivityIndicator, Divider } from "react-native-paper";
+import { ActivityIndicator, Divider, IconButton, Text } from "react-native-paper";
 import { View } from "react-native";
 import { Image } from "react-native";
+import axios from "axios";
+import { baseUrl } from '../constants';
 
-const SharedPost = ({username}) => {
+const SharedPost = ({username, ratio}) => {
   const [imageUri, setImageUri] = useState(null)
   const [stats, setStats] = useState(null);
 
-  const token = useSelector(state => state.user.bearerToken);
-
-  const {data, error, loading, postData, reset} = usePostData('/');
+  const token = useSelector(state => state.user.accessToken);
 
   useEffect(() => {
     getImageUrl(username).then(res => setImageUri(res));
+    axios.post(baseUrl + `/interact/${username}/seen`, {}, {headers: {'Authorization': 'Bearer ' + token}});
   }, []);
 
   return (
-    loading ? 
-    <View style={{window: '100%', height: 300, flex: 0, justifyContent: 'center', alignItems: 'center'}}>
-      <ActivityIndicator />
-    </View> :
     <View style={style.post}>
       <Image 
         source={{uri: imageUri}}
         style={{width: 380, height: 380}}
       />
-      <View style={style.buttons}>
-        
+      <View style={style.actions}>
+        <View style={{flex: 0, flexDirection: 'row'}}>
+          <Text>Like Ratio: {ratio}</Text>
+        </View>
+        <View>
+          <IconButton 
+            icon="cards-heart-outline"
+            size={30}
+            iconColor="#de2f5a"
+            // TODO: like on click
+            onPress={() => axios.post(baseUrl + `/interact/${username}/liked`, {})}
+          />
+        </View>
       </View>
       <Divider />
     </View>
@@ -46,8 +54,13 @@ const style = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#e3e3e3"
   },
-  buttons: {
-
+  actions: {
+    width: '100%',
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20
   }
 });
 
