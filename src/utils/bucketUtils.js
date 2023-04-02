@@ -56,13 +56,13 @@ export const uploadImage = async (username) => {
 
 export const checkImage = async (username) => {
     const AWS = require('aws-sdk')
-    const s3 = new AWS.S3()
     AWS.config.update({
-        region: "eu-central-1",
+      region: "eu-central-1",
         accessKeyId,
         secretAccessKey,
         endpoint: "https://eu-central-1.linodeobjects.com",
-    })
+      })
+    const s3 = new AWS.S3()
 
     try {
     await s3.headObject({
