@@ -1,15 +1,12 @@
-import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import Profile from "./Profile";
+import { StyleSheet, View } from "react-native";
 import { styles } from "../constants";
-import { getUserAvatarUri } from "../utils/interfaceUtils";
-import SvgUri from "react-native-svg-uri";
-import { Button, IconButton, SegmentedButtons } from "react-native-paper";
 import Logo from "../components/Logo";
+import { Button, Text } from "react-native-paper";
 
 const Home = ({navigation}) => {
-  const username = useSelector(state => state.user.username);
-  const avatar = getUserAvatarUri(username);
+  const [tab, setTab] = useState('profile');
 
   return (
     <View style={{ ...styles.centeredFlex, ...style.container }}>
@@ -17,49 +14,15 @@ const Home = ({navigation}) => {
         <Logo />
         <View style={style.tabs}>
           <View style={style.innerTabs}>
-            <View style={style.shape}></View>
-            <Button><Text style={{color: '#fff'}}>Profile</Text></Button>
-            <Button><Text style={{color: '#fff'}}>Shared</Text></Button>
+            <View style={tab === 'shared' ? style.shapeShared : style.shape}></View>
+            <Button onPress={() => setTab('profile')}><Text style={{color: '#fff', fontSize: 16}} >Profile</Text></Button>
+            <Button onPress={() => setTab('shared')}><Text style={{color: '#fff', fontSize: 16}} >Shared</Text></Button>
           </View>
         </View>
       </View>
-      <View style={style.avatarContainer}>
-        <Image 
-          source={{uri: avatar}}
-          style={style.avatar}
-        />
-        <Text style={style.username}>{username}</Text>
-      </View>
-      <View style={style.buttons}>
-        <View style={style.buttonContainer}>
-          <IconButton
-            icon="calendar"
-            size={40}
-          />
-          <Text>History</Text>
-        </View>
-        <View style={style.buttonContainer}>
-          <IconButton
-            icon="account-group"
-            size={40}
-          />
-          <Text>Friends</Text>
-        </View>
-        <View style={style.buttonContainer}>
-          <IconButton
-            icon="chart-timeline-variant-shimmer"
-            size={40}
-          />
-          <Text>Statistics</Text>
-        </View>
-        <View style={style.buttonContainer}>
-          <IconButton
-            icon="cog"
-            size={40}
-          />
-          <Text>Settings</Text>
-        </View>
-      </View>
+      {tab === 'profile' ? 
+      <Profile navigation={navigation}/>:
+      <></>}
     </View>
   );
 }
@@ -79,30 +42,6 @@ const style = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 40,
   },
-  avatarContainer: {
-    flex: 0,
-    alignItems: 'center',
-    marginTop: 30
-  },
-  avatar: {
-    width: 160,
-    height: 160,
-    borderRadius: 9999
-  },
-  username: {
-    fontSize: 24,
-    marginTop: 20
-  },
-  buttons: {
-    flex: 0,
-    flexDirection: 'row',
-    marginTop: 20
-  },
-  buttonContainer: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
   tabs: {
     width: '100%',
     color: 'white',
@@ -114,16 +53,28 @@ const style = StyleSheet.create({
   innerTabs: {
     flex: 0, 
     flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    width: '50%', 
-    position: 'relative'
+    justifyContent: 'space-evenly', 
+    alignItems: 'center',
+    width: '60%', 
+    position: 'relative',
   },
   shape: {
-    height: '100%',
-    width: 100,
-    borderRadius: 24,
+    height: '80%',
+    width: 80,
+    borderRadius: 84,
     position: 'absolute',
-    backgroundColor: ''
+    left: 25,
+    backgroundColor: '#fff',
+    opacity: 0.15
+  },
+  shapeShared: {
+    height: '80%',
+    width: 80,
+    borderRadius: 84,
+    position: 'absolute',
+    right: 28,
+    backgroundColor: '#fff',
+    opacity: 0.15,
   }
 });
 

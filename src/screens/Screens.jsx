@@ -4,6 +4,7 @@ import Home from "./Home";
 import Login from "./LogIn";
 import React from "react"
 import SignUp from "./SignUp";
+import History from "./History";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,11 @@ const Screens = () => {
       <Stack.Screen 
         name="Home"
         component={Home}
+      />
+      <Stack.Screen 
+        name="History"
+        component={History}
+        options={{headerShown: true, title: 'Share History'}}
       />
     </Stack.Navigator>
   );
