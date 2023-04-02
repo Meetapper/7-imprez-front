@@ -6,11 +6,13 @@ import Logo from "../components/Logo";
 import { Button, Text } from "react-native-paper";
 import BleManager from 'react-native-ble-manager';
 import BLEAdvertiser from 'react-native-ble-advertiser'
+import {NativeModules, NativeEventEmitter, Platform, PermissionsAndroid} from 'react-native'
 
 const BleManagerModule = NativeModules.BleManager;
 const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const Home = ({navigation}) => {
+
   const [tab, setTab] = useState('profile');
 
   const serviceUUID = 'be599d5f-23d7-46a4-b2f3-ff2715622a09';
@@ -41,6 +43,7 @@ const Home = ({navigation}) => {
     let stopListener = BleManagerEmitter.addListener(
       'BleManagerStopScan',
       () => {
+        console.log("Scan stopped");
         setIsScanning(false);
         let ids = getNearbyUserIds();
         // TODO wysyłanie na backend
@@ -67,6 +70,7 @@ const Home = ({navigation}) => {
   }, []);
   
   const startScan = () => {
+    console.log("Scanning...")
     if (!isScanning) {
       BleManager.scan([serviceUUID], scanDuration, true).then(() => {
           setIsScanning(true);
