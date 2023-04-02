@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { styles } from "../constants";
 import Logo from "../components/Logo";
 import { Button, Text } from "react-native-paper";
+import Shared from "./Shared";
 
 const Home = ({navigation}) => {
   const [tab, setTab] = useState('profile');
@@ -22,7 +23,7 @@ const Home = ({navigation}) => {
       </View>
       {tab === 'profile' ? 
       <Profile navigation={navigation}/>:
-      <></>}
+      <Shared />}
     </View>
   );
 }

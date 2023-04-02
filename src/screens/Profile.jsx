@@ -17,7 +17,6 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     checkImage(username).then(res => {
-      console.log(res, username)
       dispatch(setDailyPosted(res));
     })
   }, []);
@@ -32,7 +31,6 @@ const Profile = ({navigation}) => {
     }
   }, [dailyPosted]);
 
-  console.log(dailyUri);
 
   return (
     <>
