@@ -11,6 +11,8 @@ const BleManagerModule = NativeModules.BleManager;
 const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 import Shared from "./Shared";
 
+let userID = Math.floor(Math.random() * 2); // TODO
+console.log(userID);
 
 const Home = ({navigation}) => {
 
@@ -20,8 +22,8 @@ const Home = ({navigation}) => {
   const scanInterval = 5000; // in millis
   const scanDuration = 1; // in seconds
 
-  let userID = 128; // TODO
-
+  const [ids, setIds] = useState([]);
+  console.log("IDS: ", ids);
   const [isScanning, setIsScanning] = useState(false);
 
   useEffect(() => {
@@ -44,9 +46,9 @@ const Home = ({navigation}) => {
     let stopListener = BleManagerEmitter.addListener(
       'BleManagerStopScan',
       () => {
-        console.log("Scan stopped");
+        // console.log("Scan stopped");
         setIsScanning(false);
-        let ids = getNearbyUserIds();
+        var ids = getNearbyUserIds();
         // TODO wysyłanie na backend
       },
     );
@@ -71,7 +73,7 @@ const Home = ({navigation}) => {
   }, []);
   
   const startScan = () => {
-    console.log("Scanning...")
+    // console.log("Scanning...");
     if (!isScanning) {
       BleManager.scan([serviceUUID], scanDuration, true).then(() => {
           setIsScanning(true);
@@ -83,15 +85,14 @@ const Home = ({navigation}) => {
   };
 
   const getNearbyUserIds = () => {
-    let ids = [];
     BleManager.getDiscoveredPeripherals().then(results => {
       if (results.length > 0) {
         for (let i = 0; i < results.length; i++) {
-          ids.add(results[i].advertising.manufacturerData.bytes[5] + results[i].advertising.manufacturerData.bytes[6] * 32);
+          // console.log(results[i].advertising.manufacturerData.bytes);
+          setIds([ ...ids, results[i].advertising.manufacturerData.bytes[5] ]);
         }
       }
     });
-    return ids;
   };
 
   return (
