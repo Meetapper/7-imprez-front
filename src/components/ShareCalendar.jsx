@@ -11,7 +11,7 @@ const ShareCalendar = ({date}) => {
       <View style={{width: '100%'}}>
         <View style={{width: '100%', flex: 0, flexDirection: 'row'}}>
           {[...Array(10)].map((_e, index) => 
-            <View key={index} style={{backgroundColor: '#000', opacity: 0.1 * (index + 1), width: '10%', height: 30}}>
+            <View key={index} style={{backgroundColor: '#De2f5a', opacity: 0.1 * (index + 1), width: '10%', height: 30}}>
             </View>
           )}
         </View>
@@ -23,7 +23,7 @@ const ShareCalendar = ({date}) => {
 
       <View style={style.days}>
         {[ ...Array(getDays(date.getFullYear(), date.getMonth() + 1))].map((_e, index) => 
-          <View key={index} style={{width: 40, height: 40, backgroundColor: "#000", borderRadius: 6, borderWidth: 1, borderColor: "#000", opacity: (0.1 * (Math.floor(Math.random() * 10)))}}></View>
+          <View key={index} style={{width: 40, height: 40, backgroundColor: "#De2f5a", borderRadius: 6, borderWidth: 1, borderColor: "#De2f5a", opacity: (0.1 * (Math.floor(Math.random() * 10)))}}></View>
         )}
       </View>
 
@@ -35,7 +35,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop:20
+    marginTop:20,
   },
   days: {
     flex: 0,
@@ -44,7 +44,7 @@ const style = StyleSheet.create({
     columnGap: 10,
     rowGap: 10,
     marginLeft: 5,
-    marginTop: 60
+    marginTop: 60,
   }
 });
 
