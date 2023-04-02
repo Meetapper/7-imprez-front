@@ -35,6 +35,8 @@ const Profile = ({navigation}) => {
     }
   }, [dailyPosted]);
 
+  
+
 
   return (
     <>
@@ -89,7 +91,10 @@ const Profile = ({navigation}) => {
 
           <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap: 10, marginTop: 20}}>
             <View style={{...style.statCircle, borderColor: "#D89eac"}}>
-              <Text style={{fontSize: 20}}>{parseInt(data?.LIKED / (data?.LIKED + data?.SEEN) * 100)}%</Text>
+              <Text style={{fontSize: 20}}>
+              {data?.LIKED + data?.SEEN > 0 ?
+                parseInt(data?.LIKED / (data?.LIKED + data?.SEEN) * 100) + "%" : "-"}
+              </Text>
             </View>
             <Text>Like Ratio</Text>
           </View>
@@ -124,7 +129,10 @@ const Profile = ({navigation}) => {
 
           <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap: 10, marginTop: 20}}>
             <View style={{...style.statCircle, borderColor: "#D89eac"}}>
-              <Text style={{fontSize: 20}}>{parseInt(data?.LIKED / (data?.LIKED + data?.SEEN) * 100)}%</Text>
+              <Text style={{fontSize: 20}}>
+                {data?.LIKED + data?.SEEN > 0 ?
+                parseInt(data?.LIKED / (data?.LIKED + data?.SEEN) * 100) + "%" : "-"}
+              </Text>
             </View>
             <Text>Like Ratio</Text>
           </View>
