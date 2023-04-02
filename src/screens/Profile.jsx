@@ -5,9 +5,11 @@ import { getUserAvatarUri } from "../utils/interfaceUtils";
 import { Button, IconButton } from "react-native-paper";
 import { checkImage, getImageUrl, uploadImage } from "../utils/bucketUtils";
 import { setDailyPosted } from "../redux/actions/sharedActions";
+import { useGetDataBearer } from "../utils/hooks";
 
 const Profile = ({navigation}) => {
   const username = useSelector(state => state.user.username);
+  const token = useSelector(state => state.user.accessToken);
   const avatar = getUserAvatarUri(username);
   const dispatch = useDispatch();
   const [dailyOpen, setDailyOpen] = useState(false);
@@ -20,6 +22,8 @@ const Profile = ({navigation}) => {
       dispatch(setDailyPosted(res));
     })
   }, []);
+
+  const {loading, error, data, postData, reset} =  useGetDataBearer('/interact/stats', token)
 
   useEffect(() => {
     if (!!dailyPosted && !dailyUri) {
@@ -59,10 +63,10 @@ const Profile = ({navigation}) => {
         </View>
         <View style={style.buttonContainer}>
           <IconButton
-            icon="chart-timeline-variant-shimmer"
+            icon="podium"
             size={40}
           />
-          <Text>Statistics</Text>
+          <Text>Leaderboards</Text>
         </View>
         <View style={style.buttonContainer}>
           <IconButton
@@ -74,7 +78,29 @@ const Profile = ({navigation}) => {
       </View>
       {dailyPosted ?
       <>
-        <Text style={{fontSize: 34, marginTop: 120}}>Your Daily Share</Text>
+        <Text style={{fontSize: 34, marginTop: 20}}>Your Daily Share</Text>
+        <View style={style.stats}>
+          <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap:20}}>
+            <View style={{...style.statCircle, borderColor: "#A6a6a6"}}>
+              <Text style={{fontSize: 24}}>{data?.LIKED + data?.SEEN}</Text>
+            </View>
+            <Text>Views</Text>
+          </View>
+
+          <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap: 10, marginTop: 20}}>
+            <View style={{...style.statCircle, borderColor: "#D89eac"}}>
+              <Text style={{fontSize: 20}}>{parseInt(data?.LIKED / (data?.LIKED + data?.SEEN) * 100)}%</Text>
+            </View>
+            <Text>Like Ratio</Text>
+          </View>
+
+          <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap: 20}}>
+            <View style={{...style.statCircle, borderColor: "#De2f5a"}}>
+              <Text style={{fontSize: 24, color: "#21130d"}}>{data?.LIKED}</Text>
+            </View>
+            <Text style={{color: "#21130d"}}>Likes</Text>
+          </View>
+        </View>
         <View style={dailyOpen ? { ...style.bottomSheet, top: 0 } : style.bottomSheet}>
           <IconButton 
             icon="chevron-up"
@@ -84,29 +110,33 @@ const Profile = ({navigation}) => {
           />
           <Image 
             source={{uri: dailyUri}}
-            style={{width: 320, height: 320}}
+            style={{width: 500, height: 500}}
             resizeMode="contain"
             alt="dupa123"
           />
-          <View style={style.stats}>
-
-            <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap: 20}}>
-              <View style={style.statCircle}>
-                <Text style={{fontSize: 44}}>65%</Text>
-              </View>
-              <Text>Like Ratio</Text>
+                  <View style={{...style.stats, paddingHorizontal: 63}}>
+          <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap:20}}>
+            <View style={{...style.statCircle, borderColor: "#A6a6a6"}}>
+              <Text style={{fontSize: 24}}>{data?.LIKED + data?.SEEN}</Text>
             </View>
-
-            <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap: 20}}>
-              <View style={style.statCircle}>
-                <Text style={{fontSize: 44}}>89</Text>
-              </View>
-              <Text>Views</Text>
-            </View>
-
+            <Text>Views</Text>
           </View>
 
-          <Button onPress={() => setDailyOpen(false)} mode="contained" style={{width: '95%', marginTop: 90}}>
+          <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap: 10, marginTop: 20}}>
+            <View style={{...style.statCircle, borderColor: "#D89eac"}}>
+              <Text style={{fontSize: 20}}>{parseInt(data?.LIKED / (data?.LIKED + data?.SEEN) * 100)}%</Text>
+            </View>
+            <Text>Like Ratio</Text>
+          </View>
+
+          <View style={{flex: 0, justifyContent: 'center', alignItems: 'center', rowGap: 20}}>
+            <View style={{...style.statCircle, borderColor: "#De2f5a"}}>
+              <Text style={{fontSize: 24, color: "#21130d"}}>{data?.LIKED}</Text>
+            </View>
+            <Text style={{color: "#21130d"}}>Likes</Text>
+          </View>
+        </View>
+          <Button onPress={() => setDailyOpen(false)} mode="contained" style={{width: '95%', marginTop: 40}}>
             Close
           </Button>
         </View>
@@ -125,22 +155,22 @@ const style = StyleSheet.create({
   stats: {
     flex: 0,
     flexDirection: 'row',
-    paddingHorizontal: 30,
+    paddingHorizontal: 80,
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    marginTop: 60
+    marginTop: 20,
   },
   statCircle: {
     fontSize: 34,
-    width: 110,
-    height: 110,
+    width: 70,
+    height: 70,
     borderRadius: 9999,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#e3e3e3',
     flex: 0,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   bottomSheet: {
     flex: 0,
@@ -160,8 +190,8 @@ const style = StyleSheet.create({
     marginTop: 30
   },
   avatar: {
-    width: 160,
-    height: 160,
+    width: 140,
+    height: 140,
     borderRadius: 9999
   },
   username: {

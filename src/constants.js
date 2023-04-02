@@ -6,4 +6,4 @@ export const styles = {
   }
 }
 
-export const baseUrl = 'http://192.168.110.60:8080/api';
+export const baseUrl = 'http://172.20.47.41:8080/api';
