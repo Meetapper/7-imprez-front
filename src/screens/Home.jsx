@@ -1,12 +1,93 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Profile from "./Profile";
 import { StyleSheet, View } from "react-native";
 import { styles } from "../constants";
 import Logo from "../components/Logo";
 import { Button, Text } from "react-native-paper";
+import BleManager from 'react-native-ble-manager';
+import BLEAdvertiser from 'react-native-ble-advertiser'
+
+const BleManagerModule = NativeModules.BleManager;
+const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const Home = ({navigation}) => {
   const [tab, setTab] = useState('profile');
+
+  const serviceUUID = 'be599d5f-23d7-46a4-b2f3-ff2715622a09';
+  const scanInterval = 5000; // in millis
+  const scanDuration = 1; // in seconds
+
+  let userID = 128; // TODO
+
+  const [isScanning, setIsScanning] = useState(false);
+
+  useEffect(() => {
+    // turn on bluetooth if it is not on
+    BleManager.enableBluetooth().then(() => {
+      console.log('Bluetooth is turned on!');
+    });
+    // start bluetooth manager
+    BleManager.start({showAlert: false}).then(() => {
+      console.log('BLE Manager initialized');
+      BleManager.checkState().then((result) => console.log(result));
+    });
+
+    BLEAdvertiser.enableAdapter();
+    BLEAdvertiser.setCompanyId(userID); // Your Company's Code
+    BLEAdvertiser.broadcast(serviceUUID, [userID], {}) // The service UUID and additional manufacturer data. 
+    .then(success => console.log('Broadcasting Sucessful', success))
+    .catch(error => console.log('Broadcasting Error', error));
+
+    let stopListener = BleManagerEmitter.addListener(
+      'BleManagerStopScan',
+      () => {
+        setIsScanning(false);
+        let ids = getNearbyUserIds();
+        // TODO wysyłanie na backend
+      },
+    );
+
+    if (Platform.OS === 'android' && Platform.Version >= 23) {
+      PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      ).then(result => {
+        if (!result) {
+          PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          );
+        }
+      });
+    }
+
+    setInterval(startScan, scanInterval);
+
+    return () => {
+      stopListener.remove();
+    };
+  }, []);
+  
+  const startScan = () => {
+    if (!isScanning) {
+      BleManager.scan([serviceUUID], scanDuration, true).then(() => {
+          setIsScanning(true);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  };
+
+  const getNearbyUserIds = () => {
+    let ids = [];
+    BleManager.getDiscoveredPeripherals().then(results => {
+      if (results.length > 0) {
+        for (let i = 0; i < results.length; i++) {
+          ids.add(results[i].advertising.manufacturerData.bytes[5] + results[i].advertising.manufacturerData.bytes[6] * 32);
+        }
+      }
+    });
+    return ids;
+  };
 
   return (
     <View style={{ ...styles.centeredFlex, ...style.container }}>
