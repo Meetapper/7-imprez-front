@@ -4,6 +4,9 @@ import { Provider } from 'react-redux';
 import { store } from './src/redux/reduxStore';
 import Screens from './src/screens/Screens';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Warning: ...']);
 
 export default function App() {
 
